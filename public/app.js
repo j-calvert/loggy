@@ -49,5 +49,38 @@ const createGalleryFigure = async (galleryImage) => {
   }
 };
 
+function successCallback(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  const altitude = position.coords.altitude;
+  const myP = document.createElement('p');
+  myP.innerHTML = `latitude: ${latitude}`;
+  imgSection.append(myP);
+  // use the location data here
+}
+
+function errorCallback(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      // user denied the request for geolocation
+      break;
+    case error.POSITION_UNAVAILABLE:
+      // location information is unavailable
+      break;
+    case error.TIMEOUT:
+      // the request to get user location timed out
+      break;
+    case error.UNKNOWN_ERROR:
+      // an unknown error occurred
+      break;
+  }
+}
+
 registerServiceWorker();
-Gallery.images.map(createGalleryFigure);
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+} else {
+  // browser does not support geolocation
+}
+
+// Gallery.images.map(createGalleryFigure);
